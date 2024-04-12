@@ -9,13 +9,19 @@ public class Persona {
     private LocalDate fechaNacimiento;
     private String provincia;
 	public Persona() {
-
 	}
 	public Persona(String dni, String nombre, LocalDate fechaNacimiento, String provincia) {
 		this.dni = dni;
 		this.nombre = nombre;
 		this.fechaNacimiento = fechaNacimiento;
 		this.provincia = provincia;
+	}
+	
+	public Persona(String dni, String nombre, LocalDate fechaNacimiento) {
+		this.dni = dni;
+		this.nombre = nombre;
+		this.fechaNacimiento = fechaNacimiento;
+		this.provincia="Jujuy";
 	}
 	public String getDni() {
 		return dni;
