@@ -1,9 +1,11 @@
 package ar.edu.unju.fi.ejercicio18;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Scanner;
 
+import ar.edu.unju.fi.ejercicio17.model.Jugador;
 import ar.edu.unju.fi.ejercicio18.model.Destinoturistico;
 import ar.edu.unju.fi.ejercicio18.model.Pais;
 
@@ -33,9 +35,12 @@ public class Main {
 			break;
         case 3:
         	if(destinos.isEmpty()) {
-	        System.out.println("***MODIFICAR PAIS***");
-        	}else {
         		System.out.println("***LISTA VACIA***");
+        	}else {
+        		 System.out.println("***MODIFICAR PAIS***");
+                 System.out.println("Ingrese nombre: ");
+                 String nombre = sc.nextLine();
+                 ModificarPais(destinos, paises, nombre);
         	}
 	        break;
         case 4:
@@ -60,20 +65,22 @@ public class Main {
         		System.out.println("***LISTA VACIA***");
         	}else {
         	System.out.println("***MUESTRA DE LA LISTA ORDENADA POR NOMBRE***");
+        	OrdenarDestinos(destinos);
         	}
         	break;
         case 7:
-        	if(destinos.isEmpty()) {
-             System.out.println("***LISTA VACIA***");
-        	}else {
-        	System.out.println("***LISTA DE PAIS***");
-        	}
+        	System.out.println("***LISTA DE PAISES***");
+        	MostrarPaises(paises);
+        	
         	break;
         case 8:
         	if(destinos.isEmpty()) {
         		System.out.println("***LISTA VACIA***");
         	}else {
+        	limpiarBuffer();
         	System.out.println("***DESTINOS TURISTICOS POR PAIS***");
+        	codigo=IngresoCodigo(paises);
+        	DestinosPorPais(destinos, codigo);
         	}
 	        break;
         case 9:
@@ -92,6 +99,8 @@ public class Main {
     	paises.add(new Pais("USA239", "Estados Unidos"));
     	paises.add(new Pais("GER948", "Alemania"));
         paises.add(new Pais("ARG754", "Argentina"));
+        paises.add(new Pais("ESP457", "España"));
+        paises.add(new Pais("JPN854", "Japon"));
     }
     public static int menu() {
         int op;
@@ -124,6 +133,7 @@ public class Main {
     public static  void MostrarDestinos(ArrayList<Destinoturistico> destinos) {
     	for(Destinoturistico d:destinos) {
     		System.out.println(d.MostrarDatos());
+    		System.out.println("**********************");
     	}
     }
     public static boolean CodigoEncontrado(ArrayList<Pais> paises, String codigo) {
@@ -195,8 +205,49 @@ public class Main {
     		System.out.println("***DESTINO NO ENCONTRADO***");
     	}
     }
-    public static void limpiarBuffer()
-{
+    public static void OrdenarDestinos(ArrayList<Destinoturistico> destinos) {
+    	ArrayList<Destinoturistico> copia = new ArrayList (destinos);
+    	copia.sort(Comparator.comparing(Destinoturistico::getNombre));
+    	for(Destinoturistico d: copia) {
+    		System.out.println(d.MostrarDatos());
+    		System.out.println("**********************");
+    	}
+    }
+    public static void MostrarPaises(ArrayList<Pais> paises) {
+    	for(Pais p:paises) {
+    		System.out.println(p.getNombre());
+    	}
+    }
+    public static void DestinosPorPais(ArrayList<Destinoturistico> destinos, String codigo) {
+    	for(Destinoturistico d: destinos) {
+    		if(d.getCodigo().equalsIgnoreCase(codigo)) {
+    			System.out.println(d.MostrarDatos());
+    			System.out.println("**********************");
+    		}
+    	}
+    }
+    public static void ModificarPais(ArrayList<Destinoturistico> destinos, ArrayList<Pais> paises, String nombre) {
+    	Destinoturistico encontrado = new Destinoturistico();
+    	String codigoNuevo="",NuevoPais="";
+    	boolean band = false;
+    	for(Destinoturistico d: destinos) {
+    		if(d.getNombre().equalsIgnoreCase(nombre)) {
+    			encontrado = d;
+    			band = true;
+    		}
+    	}
+    	if(band) {
+    		limpiarBuffer();
+    	    codigoNuevo=IngresoCodigo(paises);
+    	    NuevoPais=SeleccionarPais(paises, codigoNuevo);
+    	    encontrado.setCodigo(codigoNuevo);
+    	    encontrado.setPais(new Pais(codigoNuevo, NuevoPais));
+    	    System.out.println("***PAIS MODIFICADO***");
+    	}else {
+    		System.out.println("***DESTINO NO ENCONTRADO***");
+    	}
+    }
+    public static void limpiarBuffer(){
     	sc.nextLine();
     	}
 }
